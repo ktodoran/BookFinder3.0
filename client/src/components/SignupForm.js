@@ -11,8 +11,6 @@ const SignupForm = () => {
 
   const [addUser] = useMutation(ADD_USER);
 
-  const [addUser] = useMutation(ADD_USER);
-
   const handleInputChange = (event) => {
     const { name, value } = event.target;
     setUserFormData({ ...userFormData, [name]: value });
@@ -56,7 +54,8 @@ const SignupForm = () => {
           <Form.Control
             type='text'
             placeholder='Your username'
-            name='username'
+            name='username'git satus
+            
             onChange={handleInputChange}
             value={userFormData.username}
             required
