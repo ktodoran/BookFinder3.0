@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 import { useMutation } from '@apollo/client';
 import { Form, Button, Alert } from 'react-bootstrap';
+
 import Auth from '../utils/auth';
 import { ADD_USER } from '../utils/mutations';
 
@@ -8,7 +9,7 @@ const SignupForm = () => {
   const [userFormData, setUserFormData] = useState({ username: '', email: '', password: '' });
   const [validated] = useState(false);
   const [showAlert, setShowAlert] = useState(false);
-
+  const [createUser] = useMutation(ADD_USER);
   const [addUser] = useMutation(ADD_USER);
 
   const handleInputChange = (event) => {
@@ -18,7 +19,7 @@ const SignupForm = () => {
 
   const handleFormSubmit = async (event) => {
     event.preventDefault();
-
+    
     const form = event.currentTarget;
     if (form.checkValidity() === false) {
       event.preventDefault();
@@ -29,6 +30,8 @@ const SignupForm = () => {
       const { data } = await addUser({
         variables: { ...userFormData }
       });
+
+      console.log(data.addUser.token);
       Auth.login(data.addUser.token);
     } catch (err) {
       console.error(err);
@@ -44,7 +47,9 @@ const SignupForm = () => {
 
   return (
     <>
+      {/* This is needed for the validation functionality above */}
       <Form noValidate validated={validated} onSubmit={handleFormSubmit}>
+        {/* show alert if server response is bad */}
         <Alert dismissible onClose={() => setShowAlert(false)} show={showAlert} variant='danger'>
           Something went wrong with your signup!
         </Alert>
@@ -54,8 +59,7 @@ const SignupForm = () => {
           <Form.Control
             type='text'
             placeholder='Your username'
-            name='username'git satus
-            
+            name='username'
             onChange={handleInputChange}
             value={userFormData.username}
             required
